@@ -2,27 +2,34 @@
 #define VECTOR_H
 
 #include <stdlib.h>
+#include <sys/types.h>
 
 /* MACROS */
-#define _vector_init(vec)                                                      \
-  vector vec;                                                                  \
-  vector_init(&vec)
+/* Cast to typeof pointer at this address */
+#define _vector_push_back(vec_address) \
+  ((typeof(*vec_address))(vector_push_back((vector*)vec_address, sizeof(**vec_address))
+#define _vector_insert_assert(vec_address, pos) \
+  ((typeof(*vec_address))(vector_insert((vector*)vec_address, sizeof(**vec_address), pos)
 
-#define _vector_add(vec, item) vector_add(&vec, (void *)item);
+/* Verify that the pointer type of vector matches its contents */
+#define vector_push_back_assert(vec_address, value) \
+  ((*_vector_push_back)(vec_address) = value)
 
 /* TYPEDEFS */
-typedef size_t vec_size_t;
+typedef size_t        vec_size_t;
 typedef unsigned char vec_type_size_t; /* used to store size of type */
-typedef int *vec_int;
-typedef char *vec_char;
+typedef int*          vec_int;
+typedef char*         vec_char;
+typedef float*        vec_float;
+typedef double*       vec_double;
 
 typedef struct vector {
-  vec_type_size_t capacity; /* capacity and total bytes allocated */
-  vec_type_size_t total;
-  void **data; /* access data of unknown type */
+  vec_size_t capacity; /* capacity and total bytes allocated */
+  vec_int    items;
+  void**     data; /* access data of unknown type */
 } vector;
 
-void vector_init(vector *);
-void vector_add(vector *, void *);
+void vector_push_back(vector* vec_address, vec_size_t);
+void vector_insert(vector*, vec_size_t, vec_int);
 
 #endif
