@@ -13,7 +13,9 @@
 
 /* Verify that the pointer type of vector matches its contents */
 #define vector_push_back_assert(vec_address, value) \
-  ((*_vector_push_back)(vec_address) = value)
+  ((*_vector_push_back(vec_address) = value)
+#define vector_insert_assert(vec_address, value, pos) \
+  ((*_vector_insert_assert(*vec_address, pos) = value);
 
 /* TYPEDEFS */
 typedef size_t        vec_size_t;
@@ -24,9 +26,9 @@ typedef float*        vec_float;
 typedef double*       vec_double;
 
 typedef struct vector {
-  vec_size_t capacity; /* capacity and total bytes allocated */
-  vec_int    items;
-  void**     data; /* access data of unknown type */
+  vec_size_t bytes_allocated;
+  vec_size_t length;
+  void**     data; /* access data within vector */
 } vector;
 
 void vector_push_back(vector* vec_address, vec_size_t);
