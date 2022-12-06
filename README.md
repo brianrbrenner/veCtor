@@ -1,2 +1,2 @@
 # veCtor
-Vector library for the C programming language, modeled similarly to std::vector in C++.
+Vector library for the C programming language, modeled after the standard "vector" container.
